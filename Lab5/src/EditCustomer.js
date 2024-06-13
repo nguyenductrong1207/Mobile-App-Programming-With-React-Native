@@ -5,36 +5,56 @@ import {useState} from 'react';
 import {View, Text, TextInput, StyleSheet} from 'react-native';
 import {Button} from 'react-native-paper';
 
-const AddCustomer = ({navigation, route}) => {
+const UpdateCustomer = ({navigation, route}) => {
   const [customerName, setName] = useState('');
   const [customerPhone, setPhone] = useState('');
   const [token, setToken] = useState('');
+  const {customerData} = route.params;
+  const {id} = customerData;
 
-  const handleAdd = async () => {
-    const postData = {
-      name: customerName,
-      phone: customerPhone,
+  console.log(customerData);
+
+  useEffect(() => {
+    setName(customerData?.name || '');
+    setPhone(customerData?.phone?.toString() || '');
+
+    const fetchToken = async () => {
+      try {
+        const storedToken = await AsyncStorage.getItem('userData');
+        setToken(storedToken);
+      } catch (error) {
+        console.error('Error fetching token:', error);
+      }
     };
 
+    fetchToken();
+  }, []);
+
+  const handleUpdate = async () => {
     try {
       setToken(await AsyncStorage.getItem('userData'));
+      const updateData = {
+        name: customerName,
+        phone: customerPhone,
+      };
+
+      axios
+        .put(
+          `https://kami-backend-5rs0.onrender.com/customers/${id}`,
+          updateData,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          },
+        )
+        .then(response => {
+          console.log('Response:', response.data);
+          navigation.goBack();
+        });
     } catch (error) {
       console.log(error);
     }
-
-    axios
-      .post(`https://kami-backend-5rs0.onrender.com/customers`, postData, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
-      .then(response => {
-        console.log('Response:', response.data);
-        navigation.goBack();
-      })
-      .catch(error => {
-        console.log('Error:', error);
-      });
   };
 
   return (
@@ -43,21 +63,22 @@ const AddCustomer = ({navigation, route}) => {
         <Text style={styles.text}>Customer name*</Text>
         <TextInput
           style={styles.textInput}
-          placeholder="Input name"
-          onChangeText={text => {
-            setName(text);
-          }}></TextInput>
+          value={customerName}
+          onChangeText={text => setName(text)}></TextInput>
       </View>
       <View>
-        <Text style={styles.text}>Phone</Text>
+        <Text style={styles.text}>Phone*</Text>
         <TextInput
           style={styles.textInput}
-          placeholder="0"
+          value={customerPhone}
           onChangeText={text => setPhone(text)}></TextInput>
       </View>
 
-      <Button style={styles.button} mode="contained" onPress={handleAdd}>
-        ADD
+      <Button
+        style={styles.button}
+        mode="contained"
+        onPress={() => handleUpdate()}>
+        Update
       </Button>
     </View>
   );
@@ -92,4 +113,4 @@ const styles = StyleSheet.create({
     backgroundColor: '#EDB3A8',
   },
 });
-export default AddCustomer;
+export default UpdateCustomer;
