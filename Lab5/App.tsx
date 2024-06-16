@@ -1,4 +1,3 @@
-
 import React from "react";
 import LoginScreen from "./src/Login";
 import Home from "./src/Home";
@@ -14,6 +13,9 @@ import UpdateService from "./src/EditService";
 import Transaction from "./src/Transaction";
 import TransactionDetails from "./src/TransactionDetail";
 import Logout from "./src/Logout";
+import CustomerDetails from "./src/CustomerDetail";
+import UpdateCustomer from "./src/EditCustomer";
+import AddTransaction from "./src/AddTransaction";
 
 const Stack = createStackNavigator();
 
@@ -60,6 +62,8 @@ const CustomerScreen = () => {
             return (null)
           }}} />
       <Stack.Screen name="AddCustomer" component={AddCustomer} />
+      <Stack.Screen name="Customer Details" component={CustomerDetails} />
+      <Stack.Screen name="Edit Customer" component={UpdateCustomer}/>
     </Stack.Navigator>
   )
 }
@@ -71,6 +75,7 @@ const TransactionScreen = () => {
             return (null)
           }}} />
       <Stack.Screen name="Transaction Details" component={TransactionDetails} />
+      <Stack.Screen name="Add Transaction" component={AddTransaction} />
     </Stack.Navigator>
   )
 }

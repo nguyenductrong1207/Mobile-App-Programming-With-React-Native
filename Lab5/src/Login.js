@@ -18,6 +18,7 @@ const LoginScreen = ({navigation}) => {
         };
 
         fetchData(postData)
+
         console.log(postData);
     }
 

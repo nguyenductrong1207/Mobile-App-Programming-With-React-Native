@@ -30,16 +30,16 @@ const ServiceDetails = ({ navigation, route }) => {
         try {
             navigation.navigate('EditService', {
                 serviceData: {
-                    id : id,
+                    id: id,
                     name: data.name,
                     price: data.price
                 }
             });
-          } catch (error) {
+        } catch (error) {
             console.error('Error fetching token:', error);
-          }
+        }
     };
-    
+
     const deleteFile = async () => {
         setIsDeleting(true);
         try {
@@ -64,13 +64,12 @@ const ServiceDetails = ({ navigation, route }) => {
                         <IconButton icon="dots-vertical" />
                     </MenuTrigger>
                     <MenuOptions>
-                        <MenuOption onSelect={() => setShowModal(true)} text="Delete">
-                            {/* <Text style={{ color: "red" }}>Delete</Text> */}
-                        </MenuOption>
 
                         <MenuOption onSelect={() => navigateToUpdateService()} text="Edit">
-                            {/* <Text>Edit</Text> */}
                         </MenuOption>
+                        <MenuOption onSelect={() => setShowModal(true)} text="Delete">
+                        </MenuOption>
+
                     </MenuOptions>
                 </Menu>
             ),

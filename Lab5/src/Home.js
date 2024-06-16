@@ -34,14 +34,16 @@ const Home = ({ navigation }) => {
         loadData();
     })
 
+
     return (
         <View style={style.container} >
+
             <View style={style.viewContent}>
                 <View>
                     <View style={style.serviceView}>
                         <Text style={style.title}>Service List</Text>
                         <IconButton
-                            icon="plus-circle"
+                            icon="plus"
                             style={style.addButton} size={30}
                             onPress={() => navigation.navigate('AddService')}
                         />
