@@ -1,105 +1,148 @@
-
-import React from "react";
-import LoginScreen from "./src/Login";
-import Home from "./src/Home";
-import AddService from "./src/AddService";
-import ServiceDetails from "./src/ServiceDetail";
-import { createStackNavigator } from "@react-navigation/stack";
-import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
-import { NavigationContainer } from "@react-navigation/native";
-import Customer from "./src/Customer";
-import AddCustomer from "./src/AddCustomer";
-import { MenuProvider } from "react-native-popup-menu";
-import UpdateService from "./src/EditService";
-import Transaction from "./src/Transaction";
-import TransactionDetails from "./src/TransactionDetail";
-import Logout from "./src/Logout";
+import React, {useState, useEffect} from 'react';
+import LoginScreen from './src/Login';
+import Home from './src/Home';
+import {createStackNavigator} from '@react-navigation/stack';
+import {createMaterialBottomTabNavigator} from '@react-navigation/material-bottom-tabs';
+import {NavigationContainer} from '@react-navigation/native';
+import BookList from './src/BookList';
+import {MenuProvider} from 'react-native-popup-menu';
+import Cart from './src/Cart';
+import {CartProvider} from './src/CartContext';
+import Profile from './src/Profile';
+import EditProfile from './src/EditProfile';
+import {ProfileProvider} from './src/ProfileContext';
+import BookDetail from './src/BookDetail';
 
 const Stack = createStackNavigator();
 
 const AllScreen = () => {
   return (
-    <Stack.Navigator initialRouteName="Login" screenOptions={{ headerShown: false }}>
+    <Stack.Navigator
+      initialRouteName="Login"
+      screenOptions={{headerShown: false}}>
       <Stack.Screen name="Login" component={LoginScreen} />
 
       <Stack.Screen name="TabNavigator" component={TabNavigator} />
-
     </Stack.Navigator>
-  )
-}
+  );
+};
+
 const HomeScreen = () => {
   return (
-    <Stack.Navigator initialRouteName="Home" screenOptions={{ headerShown: true }} >
+    <CartProvider>
+      <Stack.Navigator
+        initialRouteName="Home"
+        screenOptions={{headerShown: true}}>
+        <Stack.Screen
+          name="Home"
+          component={Home}
+          options={{
+            title: 'Home',
+            headerLeft: () => {
+              return null;
+            },
+          }}
+        />
+        <Stack.Screen name="Book Details" component={BookDetail} />
+      </Stack.Navigator>
+    </CartProvider>
+  );
+};
 
-
-      <Stack.Screen name="Home" component={Home}
-        options={{
-          title: 'Home', headerLeft: () => {
-            return (null)
-          }
-        }} />
-
-      <Stack.Screen name="AddService" component={AddService}
-        options={{ title: 'Add Service' }} />
-
-      <Stack.Screen name="Service Details" component={ServiceDetails} options={{
-        title: 'Service Details'
-      }} />
-
-      <Stack.Screen name="EditService" component={UpdateService} options={{
-        title: 'Edit Service '
-      }} />
-    </Stack.Navigator>
-  )
-}
-
-const CustomerScreen = () => {
+const BookScreen = () => {
   return (
-    <Stack.Navigator initialRouteName="Customer" screenOptions={{ headerShown: true }}   >
-      <Stack.Screen name="Customer" component={Customer} options={{headerLeft: () => {
-            return (null)
-          }}} />
-      <Stack.Screen name="AddCustomer" component={AddCustomer} />
-    </Stack.Navigator>
-  )
-}
+    <CartProvider>
+      <Stack.Navigator
+        initialRouteName="BookList"
+        screenOptions={{headerShown: true}}>
+        <Stack.Screen
+          name="BookList"
+          component={BookList}
+          options={{
+            headerLeft: () => {
+              return null;
+            },
+          }}
+        />
+        <Stack.Screen name="Book Details" component={BookDetail} />
+      </Stack.Navigator>
+    </CartProvider>
+  );
+};
 
-const TransactionScreen = () => {
+const CartScreen = () => {
   return (
-    <Stack.Navigator initialRouteName="Transaction" screenOptions={{ headerShown: true }}>
-      <Stack.Screen name="Transaction" component={Transaction} options={{headerLeft: () => {
-            return (null)
-          }}} />
-      <Stack.Screen name="Transaction Details" component={TransactionDetails} />
-    </Stack.Navigator>
-  )
-}
+    <CartProvider>
+      <Stack.Navigator
+        initialRouteName="Cart"
+        screenOptions={{headerShown: true}}>
+        <Stack.Screen
+          name="Shop Cart"
+          component={Cart}
+          options={{
+            headerLeft: () => {
+              return null;
+            },
+          }}
+        />
+      </Stack.Navigator>
+    </CartProvider>
+  );
+};
 
-const SettingScreen = () => {
+const ProfileScreen = () => {
   return (
-    <Stack.Navigator initialRouteName="Logout" screenOptions={{ headerShown: true }}>
-      <Stack.Screen name="Setting" component={Logout} options={{ headerLeft: () => { return null } }} />
-    </Stack.Navigator>
-  )
-}
+    <ProfileProvider>
+      <Stack.Navigator
+        initialRouteName="Profile"
+        screenOptions={{headerShown: true}}>
+        <Stack.Screen
+          name="Profile"
+          component={Profile}
+          options={{
+            headerLeft: () => {
+              return null;
+            },
+          }}
+        />
+        <Stack.Screen name="EditProfile" component={EditProfile} />
+      </Stack.Navigator>
+    </ProfileProvider>
+  );
+};
 const Tab = createMaterialBottomTabNavigator();
 const TabNavigator = () => {
   return (
-    <Tab.Navigator initialRouteName="Home" labeled={false} inactiveColor={"greyDark"} >
-      <Tab.Screen name="HomeScreen" component={HomeScreen}
-        options={{ tabBarIcon: 'home' }} />
+    <Tab.Navigator
+      initialRouteName="Home"
+      labeled={false}
+      inactiveColor={'greyDark'}>
+      <Tab.Screen
+        name="HomeScreen"
+        component={HomeScreen}
+        options={{tabBarIcon: 'home'}}
+      />
 
-      <Tab.Screen name="CustomerScreen" component={CustomerScreen}
-        options={{ tabBarIcon: 'account-multiple' }} />
+      <Tab.Screen
+        name="BookScreen"
+        component={BookScreen}
+        options={{tabBarIcon: 'bookshelf'}}
+      />
 
-      <Tab.Screen name="TransactionScreen" component={TransactionScreen}
-        options={{ tabBarIcon: 'bank-transfer' }} />
+      <Tab.Screen
+        name="CartScreen"
+        component={CartScreen}
+        options={{tabBarIcon: 'cart'}}
+      />
 
-      <Tab.Screen name="SettingScreen" component={SettingScreen}
-        options={{ tabBarIcon: 'cog' }} />
+      <Tab.Screen
+        name="ProfileScreen"
+        component={ProfileScreen}
+        options={{tabBarIcon: 'account-box'}}
+      />
     </Tab.Navigator>
-  )
-}
+  );
+};
 const App = () => {
   return (
     <MenuProvider>
@@ -107,7 +150,7 @@ const App = () => {
         <AllScreen />
       </NavigationContainer>
     </MenuProvider>
-  )
-}
+  );
+};
 
 export default App;
